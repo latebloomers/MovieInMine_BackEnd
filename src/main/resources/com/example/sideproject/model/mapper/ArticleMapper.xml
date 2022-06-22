@@ -3,18 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.sideproject.model.mapper.ArticleMapper">
+
     <resultMap type="ArticleDto" id="articleRM">
         <result property="articleId" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="createdAt" column="created_at"/>
     </resultMap>
-<!--    &lt;!&ndash;  게시들 등록  &ndash;&gt;-->
-<!--    <insert id="insertArticle">-->
 
-<!--        insert into article(user_id, title, content, created_at)-->
-<!--        values ( #{userId}, #{title}, #{content}, now() )-->
+    <!--  게시들 등록  -->
+    <insert id="insertArticle">
 
-<!--    </insert>-->
+        insert into article(
+            user_id, title, content, created_at
+        )
+        values (
+            #{userId}, #{title}, #{content}, now()
+        )
+    </insert>
 
     <!-- 게시글 전체 조회 -->
     <select id="selectArticle"
@@ -26,11 +31,30 @@
         order by id desc
     </select>
 
-<!--    &lt;!&ndash; 게시글 상세 조회 &ndash;&gt;-->
-<!--    <select id="selectArticleByNo" resultType="articleDto">-->
-<!--        select article_id, userid, title, content, created_at-->
-<!--        from article-->
-<!--        where article_id = #{articleId}-->
-<!--    </select>-->
+    <!-- 게시글 상세 조회 -->
+    <select id="selectArticleByNo"
+            resultType="ArticleDto"
+            resultMap="articleRM"
+    >
+        select id, user_id, title, content, created_at
+        from article
+        where id = #{articleId}
+    </select>
+
+    <!-- 게시글 수정 -->
+    <update id="updateArticle" >
+        update article
+        set title = #{title},
+            user_id = #{userId},
+            content = #{content}
+        where id = #{articleId}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteArticle" parameterType="int">
+        delete
+        from article
+        where id = #{articleId}
+    </delete>
 
 </mapper>
