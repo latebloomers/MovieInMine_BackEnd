@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sideproject.model.mapper.ArticleMapper">
+    <resultMap type="ArticleDto" id="articleRM">
+        <result property="articleId" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+<!--    &lt;!&ndash;  게시들 등록  &ndash;&gt;-->
+<!--    <insert id="insertArticle">-->
+
+<!--        insert into article(user_id, title, content, created_at)-->
+<!--        values ( #{userId}, #{title}, #{content}, now() )-->
+
+<!--    </insert>-->
+
+    <!-- 게시글 전체 조회 -->
+    <select id="selectArticle"
+            resultType="ArticleDto"
+            resultMap="articleRM"
+    >
+        select id, user_id, title, content, created_at
+        from article
+        order by id desc
+    </select>
+
+<!--    &lt;!&ndash; 게시글 상세 조회 &ndash;&gt;-->
+<!--    <select id="selectArticleByNo" resultType="articleDto">-->
+<!--        select article_id, userid, title, content, created_at-->
+<!--        from article-->
+<!--        where article_id = #{articleId}-->
+<!--    </select>-->
+
+</mapper>
