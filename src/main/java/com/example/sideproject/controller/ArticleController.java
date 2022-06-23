@@ -2,6 +2,7 @@ package com.example.sideproject.controller;
 
 import com.example.sideproject.model.ArticleDto;
 import com.example.sideproject.model.service.ArticleService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,50 +19,66 @@ import java.util.List;
 public class ArticleController {
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
 
     @Autowired
     private ArticleService articleService;
 
     @GetMapping()
     public ResponseEntity<List<ArticleDto>> getArticles() throws SQLException {
-        System.out.println("ArticleController.getArticles");
-        return new ResponseEntity<>(articleService.getArticles(), HttpStatus.OK);
+        List<ArticleDto> articles = articleService.getArticles();
+
+        logger.info("ArticleController.getArticles");
+        logger.info(articles.toString());
+
+        return new ResponseEntity<>(articles, HttpStatus.OK);
     }
 
     @GetMapping("{articleId}")
     public ResponseEntity<ArticleDto> getArticle(@PathVariable("articleId") int articleId) throws SQLException {
-        return new ResponseEntity<>(articleService.getArticle(articleId), HttpStatus.OK);
+        ArticleDto article = articleService.getArticle(articleId);
+
+        logger.info("ArticleController.getArticle");
+        logger.info(article.toString());
+
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<String> createArticle(@RequestBody ArticleDto articleDto) throws SQLException {
-//        System.out.println("ArticleController.createArticle");
-//        System.out.println(articleDto);
+        logger.info("ArticleController.createArticle");
+
         if(articleService.createArticle(articleDto)) {
-            return new ResponseEntity<String>("success", HttpStatus.OK);
+            logger.info(SUCCESS);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         }
-        else {
-            System.out.println("Error - create article");
-            return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
-        }
+        logger.info(FAIL);
+        return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("{articleId}")
     public ResponseEntity<String> updateArticle(@RequestBody ArticleDto article) throws SQLException{
+        logger.info("ArticleController.updateArticle");
 
         if(articleService.updateArticle(article)) {
-            return new ResponseEntity<String>("success", HttpStatus.OK);
+            logger.info(SUCCESS);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         }
-        return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+        logger.info(FAIL);
+        return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{articleId}")
     public ResponseEntity<String> deleteArticle(@PathVariable int articleId) throws SQLException {
+        logger.info("ArticleController.deleteArticle");
 
         if(articleService.deleteArticle(articleId)){
-            return new ResponseEntity<String>("Success", HttpStatus.OK);
+            logger.info(SUCCESS);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         }
-        return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+        logger.info(FAIL);
+        return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
     }
 
 
