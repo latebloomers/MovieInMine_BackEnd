@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.sideproject.model.mapper.ArticleMapper">
+<mapper namespace="com.latebloomers.MovieInMine.model.mapper.ArticleMapper">
 
     <resultMap type="ArticleDto" id="articleRM">
         <result property="articleId" column="id"/>

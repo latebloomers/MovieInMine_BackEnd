@@ -1,19 +1,23 @@
-package com.example.sideproject.controller;
+package com.latebloomers.MovieInMine.controller;
 
-import com.example.sideproject.model.ArticleDto;
-import com.example.sideproject.model.service.ArticleService;
-import io.swagger.annotations.Api;
+import com.latebloomers.MovieInMine.model.ArticleDto;
+import com.latebloomers.MovieInMine.model.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @CrossOrigin("*")
+@Slf4j
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
@@ -46,10 +50,18 @@ public class ArticleController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createArticle(@RequestBody ArticleDto articleDto) throws SQLException {
+    public ResponseEntity createArticle(@RequestBody @Validated ArticleDto articleDto, BindingResult bindingResult) throws SQLException {
         logger.info("ArticleController.createArticle");
 
-        if(articleService.createArticle(articleDto)) {
+        if (bindingResult.hasErrors()){
+            log.info("검증 오류 발생 errors={}", bindingResult);
+            bindingResult
+                    .getFieldErrors()
+                    .forEach(f -> log.info(f.getField() + ": " + f.getDefaultMessage()));
+            return new ResponseEntity<String>(FAIL, HttpStatus.BAD_REQUEST);
+        }
+
+        if (articleService.createArticle(articleDto)) {
             logger.info(SUCCESS);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         }

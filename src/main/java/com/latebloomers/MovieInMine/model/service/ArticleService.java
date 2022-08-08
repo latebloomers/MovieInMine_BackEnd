@@ -1,6 +1,6 @@
-package com.example.sideproject.model.service;
+package com.latebloomers.MovieInMine.model.service;
 
-import com.example.sideproject.model.ArticleDto;
+import com.latebloomers.MovieInMine.model.ArticleDto;
 
 import java.sql.SQLException;
 import java.util.List;

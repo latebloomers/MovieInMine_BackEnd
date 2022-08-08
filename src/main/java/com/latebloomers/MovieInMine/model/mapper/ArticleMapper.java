@@ -1,8 +1,7 @@
-package com.example.sideproject.model.mapper;
+package com.latebloomers.MovieInMine.model.mapper;
 
-import com.example.sideproject.model.ArticleDto;
+import com.latebloomers.MovieInMine.model.ArticleDto;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;

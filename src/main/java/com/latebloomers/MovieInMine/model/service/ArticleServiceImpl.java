@@ -1,7 +1,7 @@
-package com.example.sideproject.model.service;
+package com.latebloomers.MovieInMine.model.service;
 
-import com.example.sideproject.model.ArticleDto;
-import com.example.sideproject.model.mapper.ArticleMapper;
+import com.latebloomers.MovieInMine.model.ArticleDto;
+import com.latebloomers.MovieInMine.model.mapper.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
