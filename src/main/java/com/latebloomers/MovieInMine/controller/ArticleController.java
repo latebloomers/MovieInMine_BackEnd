@@ -42,7 +42,7 @@ public class ArticleController {
     @GetMapping("{articleId}")
     public ResponseEntity<ArticleDto> getArticle(@PathVariable("articleId") int articleId) throws SQLException {
         ArticleDto article = articleService.getArticle(articleId);
-
+ 
         logger.info("ArticleController.getArticle");
         logger.info(article.toString());
 
