@@ -42,7 +42,7 @@ public class ArticleController {
     @GetMapping("{articleId}")
     public ResponseEntity<ArticleDto> getArticle(@PathVariable("articleId") int articleId) throws SQLException {
         ArticleDto article = articleService.getArticle(articleId);
- 
+
         logger.info("ArticleController.getArticle");
         logger.info(article.toString());
 
@@ -53,13 +53,16 @@ public class ArticleController {
     public ResponseEntity createArticle(@RequestBody @Validated ArticleDto articleDto, BindingResult bindingResult) throws SQLException {
         logger.info("ArticleController.createArticle");
 
-        if (bindingResult.hasErrors()){
-            log.info("검증 오류 발생 errors={}", bindingResult);
-            bindingResult
-                    .getFieldErrors()
-                    .forEach(f -> log.info(f.getField() + ": " + f.getDefaultMessage()));
-            return new ResponseEntity<String>(FAIL, HttpStatus.BAD_REQUEST);
-        }
+//        if (bindingResult.hasErrors()){
+//            log.info("검증 오류 발생 errors={}", bindingResult);
+//            bindingResult
+//                    .getFieldErrors()
+//                    .forEach(f ->
+//                            log.info(f.getField() + ": " + f.getDefaultMessage())
+//                    );
+//            String errorMessage = bindingResult.getFieldError("title").getDefaultMessage();
+//            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
+//        }
 
         if (articleService.createArticle(articleDto)) {
             logger.info(SUCCESS);
