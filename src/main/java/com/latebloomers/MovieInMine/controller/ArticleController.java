@@ -14,7 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("*")
 @Slf4j
@@ -54,16 +56,18 @@ public class ArticleController {
     public ResponseEntity createArticle(@RequestBody @Validated ArticleDto articleDto, BindingResult bindingResult) throws SQLException {
         logger.info("ArticleController.createArticle");
 
-//        if (bindingResult.hasErrors()){
-//            log.info("검증 오류 발생 errors={}", bindingResult);
-//            bindingResult
-//                    .getFieldErrors()
-//                    .forEach(f ->
-//                            log.info(f.getField() + ": " + f.getDefaultMessage())
-//                    );
-//            String errorMessage = bindingResult.getFieldError("title").getDefaultMessage();
-//            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
-//        }
+        if (bindingResult.hasErrors()){
+
+            Map<String, String> error = new HashMap<>();
+
+            bindingResult
+                    .getFieldErrors()
+                    .forEach(f -> {
+                        log.info("검증 오류 발생 : " + f.getField() + ": " + f.getDefaultMessage());
+                        error.put(f.getField(), f.getDefaultMessage());
+                    });
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
 
         if (articleService.createArticle(articleDto)) {
             logger.info(SUCCESS);
@@ -74,8 +78,23 @@ public class ArticleController {
     }
 
     @PutMapping("{articleId}")
-    public ResponseEntity<String> updateArticle(@RequestBody ArticleDto article) throws SQLException{
+    public ResponseEntity updateArticle(@RequestBody @Validated ArticleDto article,
+                                                BindingResult bindingResult) throws SQLException{
         logger.info("ArticleController.updateArticle");
+
+        if (bindingResult.hasErrors()) {
+
+            Map<String, String> error = new HashMap<>();
+
+            bindingResult
+                    .getFieldErrors()
+                    .forEach( f -> {
+                        log.info("검증 오류 발생 : " + f.getField() + ": " + f.getDefaultMessage());
+                        error.put(f.getField(), f.getDefaultMessage());
+                    } );
+            
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
 
         if(articleService.updateArticle(article)) {
             logger.info(SUCCESS);
