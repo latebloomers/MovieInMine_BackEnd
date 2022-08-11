@@ -14,7 +14,7 @@ EXPOSE 8080
 ARG JAR_FILE=build/libs/sideProject-0.0.1-SNAPSHOT.jar
 
 # Add the application's jar to the container
-ADD ${JAR_FILE} a306.jar
+ADD ${JAR_FILE} MIM_Backend.jar
 
 # Run the jar file
-ENTRYPOINT ["java","-jar","/a306.jar"]
+ENTRYPOINT ["java","-jar","/MIM_Backend.jar"]
