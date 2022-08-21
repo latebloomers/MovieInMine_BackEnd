@@ -1,4 +1,4 @@
-package com.latebloomers.MovieInMine.model.service;
+package com.latebloomers.MovieInMine.service;
 
 import com.latebloomers.MovieInMine.model.ArticleDto;
 
