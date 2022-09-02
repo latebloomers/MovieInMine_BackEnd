@@ -1,7 +1,7 @@
 package com.latebloomers.MovieInMine.config.auth;
 
 import com.latebloomers.MovieInMine.model.User;
-import com.latebloomers.MovieInMine.repository.UserRepository;
+import com.latebloomers.MovieInMine.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,4 +1,4 @@
-package com.latebloomers.MovieInMine.repository;
+package com.latebloomers.MovieInMine.model.repository;
 
 import com.latebloomers.MovieInMine.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
