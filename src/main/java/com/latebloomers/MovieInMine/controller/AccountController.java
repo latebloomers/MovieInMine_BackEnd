@@ -27,9 +27,7 @@ public class AccountController {
 
     @Autowired
     private UserRepository userRepository;
-
     private final JwtTokenProvider jwtTokenProvider;
-
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 
@@ -37,9 +35,9 @@ public class AccountController {
     // 회원가입
     @PostMapping("/signup")
     public String signUp(@RequestBody User user){
+        log.info("METHOD: (POST)signUp");
+        //log.info(user.toString());
 
-        log.info("AccountController.signUp");
-        log.info(user.toString());
         String rawPassword = user.getPassword();
         String encPassword = bcryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
@@ -52,6 +50,7 @@ public class AccountController {
     // 로그인 -> 프론트 로그인폼 URL로 리다이렉트
     @GetMapping("/signin")
     public void redirectSignIn(HttpServletResponse response) throws IOException {
+        log.info("METHOD: (GET)redirectSignIn");
 
         String frontSignInURL = "https://mim.hyeokho.me/users/signin/";
         response.sendRedirect(frontSignInURL);
@@ -60,36 +59,51 @@ public class AccountController {
     // 로그인 수행
     @PostMapping("/signin")
     public String signIn(@RequestBody Map<String, String> user){
+        log.info("METHOD: (POST)signIn");
 
-        log.info("username = {}", user.get("username"));
+        //log.info("username = {}", user.get("username"));
         User member = userRepository.findByUsername(user.get("username"));
         return jwtTokenProvider.createToken(member.getUsername());
 
     }
     // 회원탈퇴
-    @DeleteMapping("/withdraw")
-    public String withdraw(@RequestBody User user) {
-        return "";
-
-    }
-    // 회원 찾기
-    // 전달받은 User.id로 DB에 해당 User를 찾아 JSON 형태로 Return
-    @GetMapping("/finduser")
-    public ResponseEntity findUser(@RequestParam int userId){
-
-        System.out.println("AccountController.findUser");
+    // 요청한 userId로 DB에서 해당 회원을 삭제하고 성공메시지 리턴
+    // 요청한 회원을 찾을 수 없다면 에러메시지 리턴
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@RequestParam String userId) {
+        log.info("METHOD: deleteUser");
+        log.info(userId);
 
         Map<String, String> error = new HashMap<>();
-        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(userId));
 
-        if(optionalUser.isPresent()) {
-            return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
+        if (optionalUser.isPresent()){
+            userRepository.delete(optionalUser.get());
+            return new ResponseEntity<>("회원탈퇴 성공", HttpStatus.OK);
+
         } else {
-            error.put("findUserError", "에러: 요청한 사용자를 찾을 수 없습니다.");
+            error.put("errorMessage", "에러: 요청한 회원을 찾을 수 없습니다.");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
+    }
+    // 회원 찾기
+    // 요청한 userId로 DB에서 해당 회원을 찾아 JSON 형태로 리턴
+    // 요청한 회원을 찾을 수 없다면 에러메시지 리턴
+    @GetMapping("/finduser")
+    public ResponseEntity findUser(@RequestParam String userId){
+        log.info("METHOD: findUser");
 
+        Map<String, String> error = new HashMap<>();
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(userId));
+
+        if(optionalUser.isPresent()) {
+            return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
+
+        } else {
+            error.put("errorMessage", "에러: 요청한 회원을 찾을 수 없습니다.");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
